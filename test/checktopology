@@ -1,6 +1,6 @@
 #!/bin/bash
-# check numactl --hardware output
-# this checks most of the topology discovery in libnuma
+# check nusactl --hardware output
+# this checks most of the topology discovery in libnusa
 
 testdir=`dirname "$0"`
 : ${srcdir:=${testdir}/..}
@@ -10,20 +10,20 @@ export PATH=${builddir}:$PATH
 numcpus=$(grep -c processor /proc/cpuinfo)
 numnodes=$(ls -1d /sys/devices/system/node/node[0-9]* | wc -l)
 
-nccpus=$(numactl --hardware | grep cpus | sed 's/node.*cpus://' | wc -w ) 
-ncnodes=$(numactl --hardware | grep -c 'node.*size' ) 
+nccpus=$(nusactl --hardware | grep cpus | sed 's/node.*cpus://' | wc -w ) 
+ncnodes=$(nusactl --hardware | grep -c 'node.*size' ) 
 
 if [ $numnodes != $ncnodes ] ; then
-    echo "numactl --hardware doesnt report all nodes"
+    echo "nusactl --hardware doesnt report all nodes"
     exit 1
 fi
 
 if [ $numcpus != $nccpus -a \( $[$nccpus / $numnodes] != $numcpus \) ] ; then
-    echo "numactl --hardware cpus look bogus"
+    echo "nusactl --hardware cpus look bogus"
     exit 1
 fi
 
-numactl --hardware | grep cpus | while read n ; do 
+nusactl --hardware | grep cpus | while read n ; do 
     node=${n/ cpus*/} 
     node=${node/ /}
     cpus=${n/*: /}

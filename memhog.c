@@ -1,12 +1,12 @@
 /* Copyright (C) 2003,2004 Andi Kleen, SuSE Labs.
    Allocate memory with policy for testing.
 
-   numactl is free software; you can redistribute it and/or
+   nusactl is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; version
    2.
 
-   numactl is distributed in the hope that it will be useful,
+   nusactl is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    General Public License for more details.
@@ -21,8 +21,8 @@
 #include <sys/fcntl.h>
 #include <string.h>
 #include <stdbool.h>
-#include "numa.h"
-#include "numaif.h"
+#include "nusa.h"
+#include "nusaif.h"
 #include "util.h"
 
 #define terr(x) perror(x)
@@ -74,8 +74,8 @@ int main(int ac, char **av)
 	int fd = -1;
 	bool disable_hugepage = false;
 
-	nodes = numa_allocate_nodemask();
-	gnodes = numa_allocate_nodemask();
+	nodes = nusa_allocate_nodemask();
+	gnodes = nusa_allocate_nodemask();
 
 	while (av[1] && av[1][0] == '-') {
 		switch (av[1][1]) {
@@ -99,13 +99,13 @@ int main(int ac, char **av)
 	if (!av[1]) usage();
 
 	length = memsize(av[1]);
-	if (av[2] && numa_available() < 0) {
+	if (av[2] && nusa_available() < 0) {
 		printf("Kernel doesn't support NUMA policy\n");
 	} else
 		loose = 1;
 	policy = parse_policy(av[2], av[3]);
 	if (policy != MPOL_DEFAULT)
-		nodes = numa_parse_nodestring(av[3]);
+		nodes = nusa_parse_nodestring(av[3]);
         if (!nodes) {
 		printf ("<%s> is invalid\n", av[3]);
 		exit(1);
@@ -133,7 +133,7 @@ int main(int ac, char **av)
 		ret = 1;
 		printf("policy %d gpolicy %d\n", policy, gpolicy);
 	}
-	if (!loose && !numa_bitmask_equal(gnodes, nodes)) {
+	if (!loose && !nusa_bitmask_equal(gnodes, nodes)) {
 		printf("nodes differ %lx, %lx!\n",
 			gnodes->maskp[0], nodes->maskp[0]);
 		ret = 1;

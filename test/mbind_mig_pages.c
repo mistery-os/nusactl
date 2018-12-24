@@ -6,8 +6,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <numa.h>
-#include <numaif.h>
+#include <nusa.h>
+#include <nusaif.h>
 #include <unistd.h>
 #include <asm/unistd.h>
 
@@ -32,12 +32,12 @@ int main(int argc, char **argv)
 
 	pagesize = getpagesize();
 
-	nr_nodes = numa_max_node()+1;
+	nr_nodes = nusa_max_node()+1;
 
-	old_nodes = numa_bitmask_alloc(nr_nodes);
-	new_nodes = numa_bitmask_alloc(nr_nodes);
-	numa_bitmask_setbit(old_nodes, 0);
-	numa_bitmask_setbit(new_nodes, 1);
+	old_nodes = nusa_bitmask_alloc(nr_nodes);
+	new_nodes = nusa_bitmask_alloc(nr_nodes);
+	nusa_bitmask_setbit(old_nodes, 0);
+	nusa_bitmask_setbit(new_nodes, 1);
 
 	if (nr_nodes < 2) {
 		printf("A minimum of 2 nodes is required for this test.\n");
@@ -70,11 +70,11 @@ int main(int argc, char **argv)
 	}
 
 	/* Move pages toi node zero */
-	numa_move_pages(0, page_count, addr, nodes, status, 0);
+	nusa_move_pages(0, page_count, addr, nodes, status, 0);
 
 	printf("\nPage status before page migration\n");
 	printf("---------------------------------\n");
-	rc = numa_move_pages(0, page_count, addr, NULL, status, 0);
+	rc = nusa_move_pages(0, page_count, addr, NULL, status, 0);
 	if (rc < 0) {
 		perror("move_pages");
 		exit(1);
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 		errors++;
 	}
 
-	numa_move_pages(0, page_count, addr, NULL, status, 0);
+	nusa_move_pages(0, page_count, addr, NULL, status, 0);
 	for (i = 0; i < page_count; i++) {
 		printf("Page %d vaddr=%lx node=%d\n", i,
 			(unsigned long)(pages + i * pagesize), status[i]);

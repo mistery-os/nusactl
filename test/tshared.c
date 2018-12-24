@@ -1,5 +1,5 @@
-#include <numa.h>
-#include <numaif.h>
+#include <nusa.h>
+#include <nusaif.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -20,12 +20,12 @@ int main(void)
 	int pagesz = getpagesize();
 	int max_node;
 
-	if (numa_available() < 0) {
+	if (nusa_available() < 0) {
 		printf("no NUMA API available\n");
 		exit(1);
 	}
-	max_node = numa_max_node();
-	mem = numa_alloc_interleaved(MEMSZ);
+	max_node = nusa_max_node();
+	mem = nusa_alloc_interleaved(MEMSZ);
 	for (i = 0; i < NTHR; i++) {
 		if (fork() == 0) {
 			for (k = i*pagesz; k < MEMSZ; k += pagesz * NTHR) {

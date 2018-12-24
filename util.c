@@ -1,11 +1,11 @@
 /* Copyright (C) 2003,2004 Andi Kleen, SuSE Labs.
 
-   numactl is free software; you can redistribute it and/or
+   nusactl is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; version
    2.
 
-   numactl is distributed in the hope that it will be useful,
+   nusactl is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    General Public License for more details.
@@ -13,8 +13,8 @@
    You should find a copy of v2 of the GNU General Public License somewhere
    on your Linux system; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
-#include "numa.h"
-#include "numaif.h"
+#include "nusa.h"
+#include "nusaif.h"
 #include "util.h"
 #include <stdio.h>
 #include <string.h>
@@ -29,7 +29,7 @@ void printmask(char *name, struct bitmask *mask)
 	int i;
 	printf("%s: ", name);
 	for (i = 0; i < mask->size; i++)
-		if (numa_bitmask_isbitset(mask, i))
+		if (nusa_bitmask_isbitset(mask, i))
 			printf("%d ", i);
 	putchar('\n');
 }
@@ -38,7 +38,7 @@ int find_first(struct bitmask *mask)
 {
 	int i;
 	for (i = 0; i < mask->size; i++)
-		if (numa_bitmask_isbitset(mask, i))
+		if (nusa_bitmask_isbitset(mask, i))
 			return i;
 	return -1;
 }
@@ -47,7 +47,7 @@ void complain(char *fmt, ...)
 {
 	va_list ap;
 	va_start(ap, fmt);
-	fprintf(stderr, "numactl: ");
+	fprintf(stderr, "nusactl: ");
 	vfprintf(stderr,fmt,ap);
 	putchar('\n');
 	va_end(ap);
@@ -59,7 +59,7 @@ void nerror(char *fmt, ...)
 	int err = errno;
 	va_list ap;
 	va_start(ap,fmt);
-	fprintf(stderr, "numactl: ");
+	fprintf(stderr, "nusactl: ");
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 	if (err)

@@ -18,4 +18,4 @@ Older valgrind versions incorrectly report a uninitialized byte error
 on set_mempolicy. That is a false positive.
 
 TBD: more detailed unit tests for mbind / shm / {get,set}_mempolicy
-Currently everything is tested using numactl only.
+Currently everything is tested using nusactl only.

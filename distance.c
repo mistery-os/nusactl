@@ -1,12 +1,12 @@
 /* Discover distances
    Copyright (C) 2005 Andi Kleen, SuSE Labs.
 
-   libnuma is free software; you can redistribute it and/or
+   libnusa is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; version
    2.1.
 
-   libnuma is distributed in the hope that it will be useful,
+   libnusa is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
@@ -15,13 +15,13 @@
    somewhere on your Linux system; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-   All calls are undefined when numa_available returns an error. */
+   All calls are undefined when nusa_available returns an error. */
 #define _GNU_SOURCE 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "numa.h"
-#include "numaint.h"
+#include "nusa.h"
+#include "nusaint.h"
 
 static int distance_numnodes;
 static int *distance_table;
@@ -30,17 +30,17 @@ static void parse_numbers(char *s, int *iptr)
 {
 	int i, d, j;
 	char *end;
-	int maxnode = numa_max_node();
+	int maxnode = nusa_max_node();
 	int numnodes = 0;
 
 	for (i = 0; i <= maxnode; i++)
-		if (numa_bitmask_isbitset(numa_nodes_ptr, i))
+		if (nusa_bitmask_isbitset(nusa_nodes_ptr, i))
 			numnodes++;
 
 	for (i = 0, j = 0; i <= maxnode; i++, j++) {
 		d = strtoul(s, &end, 0);
 		/* Skip unavailable nodes */
-		while (j<=maxnode && !numa_bitmask_isbitset(numa_nodes_ptr, j))
+		while (j<=maxnode && !nusa_bitmask_isbitset(nusa_nodes_ptr, j))
 			j++;
 		if (s == end)
 			break;
@@ -54,7 +54,7 @@ static int read_distance_table(void)
 	int nd, len;
 	char *line = NULL;
 	size_t linelen = 0;
-	int maxnode = numa_max_node() + 1;
+	int maxnode = nusa_max_node() + 1;
 	int *table = NULL;
 	int err = -1;
 
@@ -88,7 +88,7 @@ static int read_distance_table(void)
 	}
 	free(line);
 	if (err)  {
-		numa_warn(W_distance,
+		nusa_warn(W_distance,
 			  "Cannot parse distance information in sysfs: %s",
 			  strerror(errno));
 		free(table);
@@ -107,7 +107,7 @@ static int read_distance_table(void)
 	return 0;
 }
 
-int numa_distance(int a, int b)
+int nusa_distance(int a, int b)
 {
 	if (!distance_table) {
 		int err = read_distance_table();

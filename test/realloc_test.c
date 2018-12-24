@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/mman.h>
-#include "numa.h"
-#include "numaif.h"
+#include "nusa.h"
+#include "nusaif.h"
 
 #define DEFAULT_NR_PAGES	1024
 
@@ -33,12 +33,12 @@ static int parse_int(const char *str)
 int main(int argc, char **argv)
 {
 	char	*mem;
-	int		page_size = numa_pagesize();
+	int		page_size = nusa_pagesize();
 	int		node = 0;
 	int		nr_pages = DEFAULT_NR_PAGES;
 
-	if (numa_available() < 0) {
-		fprintf(stderr, "numa is not available");
+	if (nusa_available() < 0) {
+		fprintf(stderr, "nusa is not available");
 		exit(1);
 	}
 
@@ -47,12 +47,12 @@ int main(int argc, char **argv)
 	if (argc > 2)
 		nr_pages = parse_int(argv[2]);
 
-	mem = numa_alloc_onnode(page_size, node);
+	mem = nusa_alloc_onnode(page_size, node);
 
 	/* Store the policy of the newly allocated area */
 	unsigned long	nodemask;
 	int				mode;
-	int				nr_nodes = numa_num_possible_nodes();
+	int				nr_nodes = nusa_num_possible_nodes();
 	if (get_mempolicy(&mode, &nodemask, nr_nodes, mem,
 					  MPOL_F_NODE | MPOL_F_ADDR) < 0) {
 		perror("get_mempolicy() failed");
@@ -69,9 +69,9 @@ int main(int argc, char **argv)
 	int nr_moved   = 0;
 	for (i = 0; i < nr_pages; i++) {
 		/* Enlarge mem with one more page */
-		char	*new_mem = numa_realloc(mem, (i+1)*page_size, (i+2)*page_size);
+		char	*new_mem = nusa_realloc(mem, (i+1)*page_size, (i+2)*page_size);
 		if (!new_mem) {
-			perror("numa_realloc() failed");
+			perror("nusa_realloc() failed");
 			exit(1);
 		}
 
@@ -95,13 +95,13 @@ int main(int argc, char **argv)
 	}
 
 	/* Shrink to the original size */
-	mem = numa_realloc(mem, (nr_pages + 1)*page_size, page_size);
+	mem = nusa_realloc(mem, (nr_pages + 1)*page_size, page_size);
 	if (!mem) {
-		perror("numa_realloc() failed");
+		perror("nusa_realloc() failed");
 		exit(1);
 	}
 
-	numa_free(mem, page_size);
+	nusa_free(mem, page_size);
 	printf("In-place reallocs: %d\n", nr_inplace);
 	printf("Moved reallocs: %d\n", nr_moved);
 	return 0;

@@ -1,11 +1,11 @@
 /* Copyright (C) 2003,2004 Andi Kleen, SuSE Labs.
 
-   libnuma is free software; you can redistribute it and/or
+   libnusa is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; version
    2.1.
 
-   libnuma is distributed in the hope that it will be useful,
+   libnusa is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
@@ -17,9 +17,9 @@
 #include <sys/types.h>
 #include <asm/unistd.h>
 #include <errno.h>
-#include "numa.h"
-#include "numaif.h"
-#include "numaint.h"
+#include "nusa.h"
+#include "nusaif.h"
+#include "nusaint.h"
 
 #define WEAK __attribute__((weak))
 
@@ -230,37 +230,37 @@ long WEAK move_pages(int pid, unsigned long count,
 }
 
 /* SLES8 glibc doesn't define those */
-int numa_sched_setaffinity_v1(pid_t pid, unsigned len, const unsigned long *mask)
+int nusa_sched_setaffinity_v1(pid_t pid, unsigned len, const unsigned long *mask)
 {
 	return syscall(__NR_sched_setaffinity,pid,len,mask);
 }
-__asm__(".symver numa_sched_setaffinity_v1,numa_sched_setaffinity@libnuma_1.1");
+__asm__(".symver nusa_sched_setaffinity_v1,nusa_sched_setaffinity@libnusa_1.1");
 
-int numa_sched_setaffinity_v2(pid_t pid, struct bitmask *mask)
+int nusa_sched_setaffinity_v2(pid_t pid, struct bitmask *mask)
 {
-	return syscall(__NR_sched_setaffinity, pid, numa_bitmask_nbytes(mask),
+	return syscall(__NR_sched_setaffinity, pid, nusa_bitmask_nbytes(mask),
 								mask->maskp);
 }
-__asm__(".symver numa_sched_setaffinity_v2,numa_sched_setaffinity@@libnuma_1.2");
+__asm__(".symver nusa_sched_setaffinity_v2,nusa_sched_setaffinity@@libnusa_1.2");
 
-int numa_sched_getaffinity_v1(pid_t pid, unsigned len, const unsigned long *mask)
+int nusa_sched_getaffinity_v1(pid_t pid, unsigned len, const unsigned long *mask)
 {
 	return syscall(__NR_sched_getaffinity,pid,len,mask);
 
 }
-__asm__(".symver numa_sched_getaffinity_v1,numa_sched_getaffinity@libnuma_1.1");
+__asm__(".symver nusa_sched_getaffinity_v1,nusa_sched_getaffinity@libnusa_1.1");
 
-int numa_sched_getaffinity_v2(pid_t pid, struct bitmask *mask)
+int nusa_sched_getaffinity_v2(pid_t pid, struct bitmask *mask)
 {
 	/* len is length in bytes */
-	return syscall(__NR_sched_getaffinity, pid, numa_bitmask_nbytes(mask),
+	return syscall(__NR_sched_getaffinity, pid, nusa_bitmask_nbytes(mask),
 								mask->maskp);
 	/* sched_getaffinity returns sizeof(cpumask_t) */
 
 }
-__asm__(".symver numa_sched_getaffinity_v2,numa_sched_getaffinity@@libnuma_1.2");
+__asm__(".symver nusa_sched_getaffinity_v2,nusa_sched_getaffinity@@libnusa_1.2");
 
-make_internal_alias(numa_sched_getaffinity_v1);
-make_internal_alias(numa_sched_getaffinity_v2);
-make_internal_alias(numa_sched_setaffinity_v1);
-make_internal_alias(numa_sched_setaffinity_v2);
+make_internal_alias(nusa_sched_getaffinity_v1);
+make_internal_alias(nusa_sched_getaffinity_v2);
+make_internal_alias(nusa_sched_setaffinity_v1);
+make_internal_alias(nusa_sched_setaffinity_v2);

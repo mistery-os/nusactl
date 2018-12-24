@@ -16,7 +16,7 @@
 .SH NAME
 move_pages \- Move individual pages of a process to another node
 .SH SYNOPSIS
-.B #include <numaif.h>
+.B #include <nusaif.h>
 .sp
 .BI "long move_pages(int " pid ", unsigned long count, void ** " pages ", const int * " nodes ", int * " status ", int " flags );
 .SH DESCRIPTION
@@ -149,7 +149,7 @@ Too many pages to move.
 .B -EFAULT
 Parameter array could not be accessed.
 .SH "SEE ALSO"
-.BR numa_maps (5),
+.BR nusa_maps (5),
 .BR migratepages (8),
-.BR numa_stat (8),
-.BR numa (3)
+.BR nusa_stat (8),
+.BR nusa (3)

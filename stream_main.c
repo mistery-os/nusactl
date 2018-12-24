@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <sys/mman.h>
 #include <stdlib.h>
-#include "numa.h"
-#include "numaif.h"
+#include "nusa.h"
+#include "nusaif.h"
 #include "util.h"
 #include "stream_lib.h"
 
@@ -13,7 +13,7 @@ void usage(void)
 
 char *policy = "default";
 
-/* Run STREAM with a numa policy */
+/* Run STREAM with a nusa policy */
 int main(int ac, char **av)
 {
 	struct bitmask *nodes;
@@ -23,10 +23,10 @@ int main(int ac, char **av)
 
 	policy = parse_policy(av[1], av[2]);
 
-        nodes = numa_allocate_nodemask();
+        nodes = nusa_allocate_nodemask();
 
 	if (av[1] && av[2])
-		nodes = numa_parse_nodestring(av[2]);
+		nodes = nusa_parse_nodestring(av[2]);
 	if (!nodes) {
 		printf ("<%s> is invalid\n", av[2]);
 		exit(1);

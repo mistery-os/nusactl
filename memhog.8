@@ -14,7 +14,7 @@ memhog \- Allocates memory with policy for testing
 ]
 .SH DESCRIPTION
 .B memhog 
-mmaps a memory region for a given size and sets the numa policy (if specified). 
+mmaps a memory region for a given size and sets the nusa policy (if specified). 
 It then updates the memory region for the given number of iterations using memset.
 .TS
 tab(|);
@@ -26,7 +26,7 @@ l l.
 |suffix (G=gigabyte, M=megabyte, K=kilobyte)
 .TE
 
-Supported numa-policies:
+Supported nusa-policies:
 .TP
 .B interleave 
 Memory will be allocated using round robin on nodes. When
@@ -65,4 +65,4 @@ Andi Kleen (ak@suse.de)
 GPL v2
 
 .SH SEE ALSO
-.I mmap(2), memset(3), numactl(8), numastat(8)
+.I mmap(2), memset(3), nusactl(8), nusastat(8)

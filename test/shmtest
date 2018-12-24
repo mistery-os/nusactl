@@ -14,12 +14,12 @@ set -e
 
 export PATH=`pwd`/..:$PATH
 
-numactl() { 
-	$VALGRIND ../numactl "$@"
+nusactl() { 
+	$VALGRIND ../nusactl "$@"
 }
 
 failure() { 
-	numastat > after
+	nusastat > after
 	set +e
 	diff -u before after
 	echo
@@ -32,7 +32,7 @@ success() {
 }	
 
 checkpoint() {
-	numastat > before 
+	nusastat > before 
 }	
 
 trap failure EXIT
@@ -40,25 +40,25 @@ trap failure EXIT
 basictest() { 
 echo initial
 checkpoint
-numactl --length=20m $1 --dump
+nusactl --length=20m $1 --dump
 echo interleave
 checkpoint
-numactl --offset=2m --length=2m $1 --strict --interleave=0,1 --verify --dump
+nusactl --offset=2m --length=2m $1 --strict --interleave=0,1 --verify --dump
 echo interleave verify
 checkpoint
-numactl $1 --dump
+nusactl $1 --dump
 echo membind setup
 checkpoint
-numactl --offset 4m --length=2m $1 --strict --membind=1 --verify --dump
+nusactl --offset 4m --length=2m $1 --strict --membind=1 --verify --dump
 echo membind verify
 checkpoint
-numactl $1 --dump
+nusactl $1 --dump
 echo preferred setup
 checkpoint
-numactl --offset 6m --length 2m $1 --strict --preferred=1 --verify --dump
+nusactl --offset 6m --length 2m $1 --strict --preferred=1 --verify --dump
 echo preferred verify
 checkpoint
-numactl $1 --dump
+nusactl $1 --dump
 
 # check overlaps here
 } 

@@ -2,12 +2,12 @@
    Copyright 2010 Intel Corporation
    Author: Andi Kleen
 
-   libnuma is free software; you can redistribute it and/or
+   libnusa is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; version
    2.1.
 
-   libnuma is distributed in the hope that it will be useful,
+   libnusa is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
@@ -45,8 +45,8 @@
 #include <assert.h>
 #include <regex.h>
 #include <sys/sysmacros.h>
-#include "numa.h"
-#include "numaint.h"
+#include "nusa.h"
+#include "nusaint.h"
 #include "sysfs.h"
 #include "affinity.h"
 #include "rtnetlink.h"
@@ -63,11 +63,11 @@ static int node_parse_failure(int ret, char *cls, const char *dev)
 	if (!cls)
 		cls = "";
 	if (ret == -2)
-		numa_warn(W_node_parse1,
+		nusa_warn(W_node_parse1,
 			  "Kernel does not know node mask for%s%s device `%s'",
 				*cls ? " " : "", cls, dev);
 	else
-		numa_warn(W_node_parse2,
+		nusa_warn(W_node_parse2,
 			  "Cannot read node mask for %s device `%s'",
 			  cls, dev);
 	return -1;
@@ -81,7 +81,7 @@ affinity_class(struct bitmask *mask, char *cls, const char *dev)
 	while (isspace(*dev))
 		dev++;
 	if (badchar(dev)) {
-		numa_warn(W_badchar, "Illegal characters in `%s' specification",
+		nusa_warn(W_badchar, "Illegal characters in `%s' specification",
 			  dev);
 		return -1;
 	}
@@ -107,7 +107,7 @@ affinity_class(struct bitmask *mask, char *cls, const char *dev)
 			assert(match[0].rm_eo > 0);
 			path[match[1].rm_eo + 1] = 0;
 			p = path + match[0].rm_so;
-			ret = sysfs_node_read(mask, "/sys/%s/numa_node", p);
+			ret = sysfs_node_read(mask, "/sys/%s/nusa_node", p);
 			if (ret < 0)
 				return node_parse_failure(ret, NULL, p);
 			return ret;
@@ -115,7 +115,7 @@ affinity_class(struct bitmask *mask, char *cls, const char *dev)
 	}
 	free(fn);
 
-	ret = sysfs_node_read(mask, "/sys/class/%s/%s/device/numa_node",
+	ret = sysfs_node_read(mask, "/sys/class/%s/%s/device/nusa_node",
 			      cls, dev);
 	if (ret < 0)
 		return node_parse_failure(ret, cls, dev);
@@ -135,7 +135,7 @@ static int affinity_file(struct bitmask *mask, char *cls, const char *file)
 	cls = "block";
 	char fn[sizeof("/sys/class/") + strlen(cls)];
 	if (stat(file, &st) < 0) {
-		numa_warn(W_blockdev1, "Cannot stat file %s", file);
+		nusa_warn(W_blockdev1, "Cannot stat file %s", file);
 		return -1;
 	}
 	d = st.st_dev;
@@ -150,7 +150,7 @@ static int affinity_file(struct bitmask *mask, char *cls, const char *file)
 	sprintf(fn, "/sys/class/%s", cls);
 	dir = opendir(fn);
 	if (!dir) {
-		numa_warn(W_blockdev2, "Cannot enumerate %s devices in sysfs",
+		nusa_warn(W_blockdev2, "Cannot enumerate %s devices in sysfs",
 			  cls);
 		return -1;
 	}
@@ -172,7 +172,7 @@ static int affinity_file(struct bitmask *mask, char *cls, const char *file)
 			free(dev);
 		}
 		if (n != 2) {
-			numa_warn(W_blockdev3, "Cannot parse sysfs device %s",
+			nusa_warn(W_blockdev3, "Cannot parse sysfs device %s",
 				  name);
 			continue;
 		}
@@ -185,7 +185,7 @@ static int affinity_file(struct bitmask *mask, char *cls, const char *file)
 		return ret;
 	}
 	closedir(dir);
-	numa_warn(W_blockdev5, "Cannot find block device %x:%x in sysfs for `%s'",
+	nusa_warn(W_blockdev5, "Cannot find block device %x:%x in sysfs for `%s'",
 		  maj, min, file);
 	return -1;
 }
@@ -214,13 +214,13 @@ static int find_route(struct sockaddr *dst, int *iifp)
 	};
 
 	if (rta_put_address(&req.msg, RTA_DST, dst) < 0) {
-		numa_warn(W_netlink1, "Cannot handle network family %x",
+		nusa_warn(W_netlink1, "Cannot handle network family %x",
 			  dst->sa_family);
 		return -1;
 	}
 
 	if (rtnetlink_request(&req.msg, sizeof req, &adr) < 0) {
-		numa_warn(W_netlink2, "Cannot request rtnetlink route: %s",
+		nusa_warn(W_netlink2, "Cannot request rtnetlink route: %s",
 			  strerror(errno));
 		return -1;
 	}
@@ -234,7 +234,7 @@ static int find_route(struct sockaddr *dst, int *iifp)
 		}
 	}
 
-	numa_warn(W_netlink3, "rtnetlink query did not return interface");
+	nusa_warn(W_netlink3, "rtnetlink query did not return interface");
 	return -1;
 }
 
@@ -262,7 +262,7 @@ static int affinity_ip(struct bitmask *mask, char *cls, const char *id)
 	struct ifreq ifr;
 
 	if ((n = getaddrinfo(id, NULL, NULL, &ai)) != 0) {
-		numa_warn(W_net1, "Cannot resolve %s: %s",
+		nusa_warn(W_net1, "Cannot resolve %s: %s",
 			  id, gai_strerror(n));
 		return -1;
 	}
@@ -271,7 +271,7 @@ static int affinity_ip(struct bitmask *mask, char *cls, const char *id)
 		goto out_ai;
 
 	if (iif_to_name(iif, &ifr) < 0) {
-		numa_warn(W_net2, "Cannot resolve network interface %d", iif);
+		nusa_warn(W_net2, "Cannot resolve network interface %d", iif);
 		goto out_ai;
 	}
 
@@ -300,11 +300,11 @@ static int affinity_pci(struct bitmask *mask, char *cls, const char *id)
 		if (n == 2)
 			func = 0;
 	} else {
-		numa_warn(W_pci1, "Cannot parse PCI device `%s'", id);
+		nusa_warn(W_pci1, "Cannot parse PCI device `%s'", id);
 		return -1;
 	}
 	ret = sysfs_node_read(mask,
-			"/sys/devices/pci%04x:%02x/%04x:%02x:%02x.%x/numa_node",
+			"/sys/devices/pci%04x:%02x/%04x:%02x:%02x.%x/nusa_node",
 			      seg, bus, seg, bus, dev, func);
 	if (ret < 0)
 		return node_parse_failure(ret, cls, id);
@@ -337,7 +337,7 @@ hidden int resolve_affinity(const char *id, struct bitmask *mask)
 		if (!strncmp(id, h->name, len)) {
 			int ret = h->handler(mask, h->cls, id + len);
 			if (ret == -2) {
-				numa_warn(W_nonode, "Kernel does not know node for %s\n",
+				nusa_warn(W_nonode, "Kernel does not know node for %s\n",
 					  id + len);
 			}
 			return ret;

@@ -4,43 +4,43 @@ CLEANFILES =
 
 AM_CPPFLAGS = -Wall
 
-bin_PROGRAMS = numactl numastat numademo migratepages migspeed memhog
+bin_PROGRAMS = nusactl nusastat nusademo migratepages migspeed memhog
 
-lib_LTLIBRARIES = libnuma.la
+lib_LTLIBRARIES = libnusa.la
 
-include_HEADERS = numa.h numacompat1.h numaif.h
+include_HEADERS = nusa.h nusacompat1.h nusaif.h
 
-noinst_HEADERS = numaint.h util.h
+noinst_HEADERS = nusaint.h util.h
 
-dist_man_MANS = move_pages.2 numa.3 numactl.8 numastat.8 migratepages.8 migspeed.8 memhog.8
+dist_man_MANS = move_pages.2 nusa.3 nusactl.8 nusastat.8 migratepages.8 migspeed.8 memhog.8
 
 EXTRA_DIST = README.md INSTALL.md
 
-numactl_SOURCES = numactl.c util.c shm.c shm.h
-numactl_LDADD = libnuma.la
+nusactl_SOURCES = nusactl.c util.c shm.c shm.h
+nusactl_LDADD = libnusa.la
 
-numastat_SOURCES = numastat.c
-numastat_CFLAGS = $(AM_CFLAGS) -std=gnu99
+nusastat_SOURCES = nusastat.c
+nusastat_CFLAGS = $(AM_CFLAGS) -std=gnu99
 
-numademo_SOURCES = numademo.c stream_lib.c stream_lib.h mt.c mt.h clearcache.c clearcache.h
-numademo_CPPFLAGS = $(AM_CPPFLAGS) -DHAVE_STREAM_LIB -DHAVE_MT -DHAVE_CLEAR_CACHE
-numademo_CFLAGS = -O3 -ffast-math -funroll-loops
+nusademo_SOURCES = nusademo.c stream_lib.c stream_lib.h mt.c mt.h clearcache.c clearcache.h
+nusademo_CPPFLAGS = $(AM_CPPFLAGS) -DHAVE_STREAM_LIB -DHAVE_MT -DHAVE_CLEAR_CACHE
+nusademo_CFLAGS = -O3 -ffast-math -funroll-loops
 if HAVE_TREE_VECTORIZE
-numademo_CFLAGS += -ftree-vectorize
+nusademo_CFLAGS += -ftree-vectorize
 endif
-numademo_LDADD = libnuma.la -lm
+nusademo_LDADD = libnusa.la -lm
 
 migratepages_SOURCES = migratepages.c util.c
-migratepages_LDADD = libnuma.la
+migratepages_LDADD = libnusa.la
 
 migspeed_SOURCES = migspeed.c util.c
-migspeed_LDADD = libnuma.la -lrt
+migspeed_LDADD = libnusa.la -lrt
 
 memhog_SOURCES = memhog.c util.c
-memhog_LDADD = libnuma.la
+memhog_LDADD = libnusa.la
 
-libnuma_la_SOURCES = libnuma.c syscall.c distance.c affinity.c affinity.h sysfs.c sysfs.h rtnetlink.c rtnetlink.h versions.ldscript
-libnuma_la_LDFLAGS = -version-info 1:0:0 -Wl,--version-script,$(srcdir)/versions.ldscript -Wl,-init,numa_init -Wl,-fini,numa_fini
+libnusa_la_SOURCES = libnusa.c syscall.c distance.c affinity.c affinity.h sysfs.c sysfs.h rtnetlink.c rtnetlink.h versions.ldscript
+libnusa_la_LDFLAGS = -version-info 1:0:0 -Wl,--version-script,$(srcdir)/versions.ldscript -Wl,-init,nusa_init -Wl,-fini,nusa_fini
 
 check_PROGRAMS = \
 	test/distance \
@@ -63,7 +63,7 @@ EXTRA_DIST += \
 	test/bind_range \
 	test/checkaffinity \
 	test/checktopology \
-	test/numademo \
+	test/nusademo \
 	test/printcpu \
 	test/regress \
 	test/regress2 \
@@ -72,46 +72,46 @@ EXTRA_DIST += \
 	test/shmtest
 
 test_distance_SOURCES = test/distance.c
-test_distance_LDADD = libnuma.la
+test_distance_LDADD = libnusa.la
 
 test_ftok_SOURCES = test/ftok.c
-test_ftok_LDADD = libnuma.la
+test_ftok_LDADD = libnusa.la
 
 test_mbind_mig_pages_SOURCES = test/mbind_mig_pages.c
-test_mbind_mig_pages_LDADD = libnuma.la
+test_mbind_mig_pages_LDADD = libnusa.la
 
 test_migrate_pages_SOURCES = test/migrate_pages.c
-test_migrate_pages_LDADD = libnuma.la
+test_migrate_pages_LDADD = libnusa.la
 
 test_move_pages_SOURCES = test/move_pages.c
-test_move_pages_LDADD = libnuma.la
+test_move_pages_LDADD = libnusa.la
 
 test_mynode_SOURCES = test/mynode.c
-test_mynode_LDADD = libnuma.la
+test_mynode_LDADD = libnusa.la
 
 test_node_parse_SOURCES = test/node-parse.c util.c
-test_node_parse_LDADD = libnuma.la
+test_node_parse_LDADD = libnusa.la
 
 test_nodemap_SOURCES = test/nodemap.c
-test_nodemap_LDADD = libnuma.la
+test_nodemap_LDADD = libnusa.la
 
 test_pagesize_SOURCES = test/pagesize.c
-test_pagesize_LDADD = libnuma.la
+test_pagesize_LDADD = libnusa.la
 
 test_prefered_SOURCES = test/prefered.c
-test_prefered_LDADD = libnuma.la
+test_prefered_LDADD = libnusa.la
 
 test_randmap_SOURCES = test/randmap.c
-test_randmap_LDADD = libnuma.la
+test_randmap_LDADD = libnusa.la
 
 test_realloc_test_SOURCES = test/realloc_test.c
-test_realloc_test_LDADD = libnuma.la
+test_realloc_test_LDADD = libnusa.la
 
 test_tbitmap_SOURCES = test/tbitmap.c util.c
-test_tbitmap_LDADD = libnuma.la
+test_tbitmap_LDADD = libnusa.la
 
 test_tshared_SOURCES = test/tshared.c
-test_tshared_LDADD = libnuma.la
+test_tshared_LDADD = libnusa.la
 
 # Legacy make rules for test cases.
 # These will be superceded by "make check".
@@ -122,10 +122,10 @@ regress1: $(check_PROGRAMS)
 regress2: $(check_PROGRAMS)
 	cd test && ./regress2
 
-test_numademo: numademo
-	./numademo -t -e 10M
+test_nusademo: nusademo
+	./nusademo -t -e 10M
 
-test: all $(check_PROGRAMS) regress1 regress2 test_numademo
+test: all $(check_PROGRAMS) regress1 regress2 test_nusademo
 
 TESTS_ENVIRONMENT = builddir='$(builddir)'; export builddir;
 
@@ -136,7 +136,7 @@ TESTS = \
 	test/distance \
 	test/move_pages \
 	test/nodemap \
-	test/numademo \
+	test/nusademo \
 	test/regress \
 	test/tbitmap
 
@@ -157,6 +157,6 @@ SED_PROCESS = \
 	$(SED_PROCESS)
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = numa.pc
-EXTRA_DIST += numa.pc.in
-CLEANFILES += numa.pc
+pkgconfig_DATA = nusa.pc
+EXTRA_DIST += nusa.pc.in
+CLEANFILES += nusa.pc

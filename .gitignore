@@ -7,20 +7,20 @@
 .libs
 .dirstamp
 
-# libnuma libraries:
-/libnuma.la
-/libnuma.a
-/libnuma.so
-/libnuma.so.*
+# libnusa libraries:
+/libnusa.la
+/libnusa.a
+/libnusa.so
+/libnusa.so.*
 
 # Built binaries:
 /memhog
 /migratepages
 /migspeed
-/numactl
-/numademo
-/numamon
-/numastat
+/nusactl
+/nusademo
+/nusamon
+/nusastat
 /stream
 
 # Built test cases:
@@ -61,4 +61,4 @@
 /test/*.trs
 
 # pkg-config file
-numa.pc
+nusa.pc

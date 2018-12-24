@@ -1,5 +1,5 @@
 #!/bin/sh
-# More regression tests for libnuma/numa api
+# More regression tests for libnusa/nusa api
 
 VALGRIND=${VALGRIND:-}
 

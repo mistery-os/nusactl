@@ -1,6 +1,6 @@
 /* Test prefer policy */
-#include "numa.h"
-#include "numaif.h"
+#include "nusa.h"
+#include "nusaif.h"
 #include <sys/mman.h>
 #include <stdio.h>
 #include <assert.h>
@@ -12,16 +12,16 @@
 
 int main(void)
 {
-	int max = numa_max_node();
-	int maxmask = numa_num_possible_nodes();
+	int max = nusa_max_node();
+	int maxmask = nusa_num_possible_nodes();
 	struct bitmask *nodes, *mask;
 	int pagesize = getpagesize();
 	int i;
 	int pol;
 	int node;
 	int err = 0;
-	nodes = numa_bitmask_alloc(maxmask);
-	mask = numa_bitmask_alloc(maxmask);
+	nodes = nusa_bitmask_alloc(maxmask);
+	mask = nusa_bitmask_alloc(maxmask);
 
 	for (i = max; i >= 0; --i) {
 		char *mem = mmap(NULL, pagesize*(max+1), PROT_READ|PROT_WRITE,
@@ -33,9 +33,9 @@ int main(void)
 
 		printf("%d offset %lx\n", i, (long)(adr - mem));
 
-		numa_bitmask_clearall(nodes);
-		numa_bitmask_clearall(mask);
-		numa_bitmask_setbit(nodes, i);
+		nusa_bitmask_clearall(nodes);
+		nusa_bitmask_clearall(mask);
+		nusa_bitmask_setbit(nodes, i);
 
 		if (mbind(adr,  pagesize, MPOL_PREFERRED, nodes->maskp,
 							nodes->size, 0) < 0)
@@ -47,7 +47,7 @@ int main(void)
 			err("get_mempolicy");
 
 		assert(pol == MPOL_PREFERRED);
-		assert(numa_bitmask_isbitset(mask, i));
+		assert(nusa_bitmask_isbitset(mask, i));
 
 		node = 0x123;
 

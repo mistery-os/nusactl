@@ -6,8 +6,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "numa.h"
-#include "numaif.h"
+#include "nusa.h"
+#include "nusaif.h"
 #include <time.h>
 #include <errno.h>
 #include <malloc.h>
@@ -40,10 +40,10 @@ void usage(void)
 
 void displaymap(void)
 {
-	FILE *f = fopen("/proc/self/numa_maps","r");
+	FILE *f = fopen("/proc/self/nusa_maps","r");
 
 	if (!f) {
-		printf("/proc/self/numa_maps not accessible.\n");
+		printf("/proc/self/nusa_maps not accessible.\n");
 		exit(1);
 	}
 
@@ -96,11 +96,11 @@ int main(int argc, char *argv[])
 		usage();
 
 	if (verbose > 1)
-		printf("numa_max_node = %d\n", numa_max_node());
+		printf("nusa_max_node = %d\n", nusa_max_node());
 
-	numa_exit_on_error = 1;
+	nusa_exit_on_error = 1;
 
-	from = numa_parse_nodestring(argv[optind]);
+	from = nusa_parse_nodestring(argv[optind]);
 	if (!from) {
                 printf ("<%s> is invalid\n", argv[optind]);
 		exit(1);
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 	if (!argv[optind+1])
 		usage();
 
-	to = numa_parse_nodestring(argv[optind+1]);
+	to = nusa_parse_nodestring(argv[optind+1]);
 	if (!to) {
                 printf ("<%s> is invalid\n", argv[optind+1]);
 		exit(1);
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (mbind(memory, bytes, MPOL_BIND, from->maskp, from->size, 0) < 0)
-		numa_error("mbind");
+		nusa_error("mbind");
 
 	if (verbose)
 		printf("Dirtying memory....\n");
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 	clock_gettime(CLOCK_REALTIME, &start);
 
 	if (mbind(memory, bytes, MPOL_BIND, to->maskp, to->size, MPOL_MF_MOVE) <0)
-		numa_error("memory move");
+		nusa_error("memory move");
 
 	clock_gettime(CLOCK_REALTIME, &end);
 	displaymap();

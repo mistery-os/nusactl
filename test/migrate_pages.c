@@ -6,7 +6,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <numa.h>
+#include <nusa.h>
 #include <unistd.h>
 #include <errno.h>
 
@@ -31,12 +31,12 @@ int main(int argc, char **argv)
 
 	pagesize = getpagesize();
 
-	nr_nodes = numa_max_node()+1;
+	nr_nodes = nusa_max_node()+1;
 
-	old_nodes = numa_bitmask_alloc(nr_nodes);
-        new_nodes = numa_bitmask_alloc(nr_nodes);
-        numa_bitmask_setbit(old_nodes, 1);
-        numa_bitmask_setbit(new_nodes, 0);
+	old_nodes = nusa_bitmask_alloc(nr_nodes);
+        new_nodes = nusa_bitmask_alloc(nr_nodes);
+        nusa_bitmask_setbit(old_nodes, 1);
+        nusa_bitmask_setbit(new_nodes, 0);
 
 	if (nr_nodes < 2) {
 		printf("A minimum of 2 nodes is required for this test.\n");
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Move to starting node */
-	rc = numa_move_pages(0, page_count, addr, nodes, status, 0);
+	rc = nusa_move_pages(0, page_count, addr, nodes, status, 0);
 	if (rc < 0 && errno != ENOENT) {
 		perror("move_pages");
 		exit(1);
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 	printf("Page location at the beginning of the test\n");
 	printf("------------------------------------------\n");
 
-	numa_move_pages(0, page_count, addr, NULL, status, 0);
+	nusa_move_pages(0, page_count, addr, NULL, status, 0);
 	for (i = 0; i < page_count; i++) {
 		printf("Page %d vaddr=%p node=%d\n", i, pages + i * pagesize, status[i]);
 		if (i != 2 && status[i] != 1) {
@@ -89,18 +89,18 @@ int main(int argc, char **argv)
 	}
 
 	/* Move to node zero */
-	numa_move_pages(0, page_count, addr, nodes, status, 0);
+	nusa_move_pages(0, page_count, addr, nodes, status, 0);
 
 	printf("\nMigrating the current processes pages ...\n");
-	rc = numa_migrate_pages(0, old_nodes, new_nodes);
+	rc = nusa_migrate_pages(0, old_nodes, new_nodes);
 
 	if (rc < 0) {
-		perror("numa_migrate_pages failed");
+		perror("nusa_migrate_pages failed");
 		errors++;
 	}
 
 	/* Get page state after migration */
-	numa_move_pages(0, page_count, addr, NULL, status, 0);
+	nusa_move_pages(0, page_count, addr, NULL, status, 0);
 	for (i = 0; i < page_count; i++) {
 		printf("Page %d vaddr=%lx node=%d\n", i,
 			(unsigned long)(pages + i * pagesize), status[i]);

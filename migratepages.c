@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005 Christoph Lameter, Silicon Graphics, Incorporated.
- * based on Andi Kleen's numactl.c.
+ * based on Andi Kleen's nusactl.c.
  *
  * Manual process migration
  *
@@ -26,9 +26,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdarg.h>
-#include "numa.h"
-#include "numaif.h"
-#include "numaint.h"
+#include "nusa.h"
+#include "nusaif.h"
+#include "nusaint.h"
 #include "util.h"
 
 struct option opts[] = {
@@ -46,14 +46,14 @@ void usage(void)
 	exit(1);
 }
 
-void checknuma(void)
+void checknusa(void)
 {
-	static int numa = -1;
-	if (numa < 0) {
-		if (numa_available() < 0)
+	static int nusa = -1;
+	if (nusa < 0) {
+		if (nusa_available() < 0)
 			complain("This system does not support NUMA functionality");
 	}
-	numa = 0;
+	nusa = 0;
 }
 
 int main(int argc, char *argv[])
@@ -78,24 +78,24 @@ int main(int argc, char *argv[])
 	if (argc != 3)
 		usage();
 
-	checknuma();
+	checknusa();
 
 	pid = strtoul(argv[0], &end, 0);
 	if (*end || end == argv[0])
 		usage();
 
-	fromnodes = numa_parse_nodestring(argv[1]);
+	fromnodes = nusa_parse_nodestring(argv[1]);
 	if (!fromnodes) {
 		printf ("<%s> is invalid\n", argv[1]);
 		exit(1);
 	}
-	tonodes = numa_parse_nodestring(argv[2]);
+	tonodes = nusa_parse_nodestring(argv[2]);
 	if (!tonodes) {
 		printf ("<%s> is invalid\n", argv[2]);
 		exit(1);
 	}
 
-	rc = numa_migrate_pages(pid, fromnodes, tonodes);
+	rc = nusa_migrate_pages(pid, fromnodes, tonodes);
 
 	if (rc < 0) {
 		perror("migrate_pages");

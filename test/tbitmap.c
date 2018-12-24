@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "numa.h"
+#include "nusa.h"
 #include "util.h"
 
 /* For util.c. Fixme. */
@@ -70,7 +70,7 @@ int bitmap_scnprintf(char *buf, unsigned int buflen, struct bitmask *mask)
         return len;
 }
 
-extern int numa_parse_bitmap(char  *buf, struct bitmask *mask);
+extern int nusa_parse_bitmap(char  *buf, struct bitmask *mask);
 #define MASKSIZE 300
 
 int main(void)
@@ -79,20 +79,20 @@ int main(void)
 	struct bitmask *mask, *mask2;
 	int i;
 
-	mask  = numa_bitmask_alloc(MASKSIZE);
-	mask2 = numa_bitmask_alloc(MASKSIZE);
+	mask  = nusa_bitmask_alloc(MASKSIZE);
+	mask2 = nusa_bitmask_alloc(MASKSIZE);
 
 	printf("Testing bitmap functions\n");
 	for (i = 0; i < MASKSIZE; i++) {
-		numa_bitmask_clearall(mask);
-		numa_bitmask_clearall(mask2);
-		numa_bitmask_setbit(mask, i);
+		nusa_bitmask_clearall(mask);
+		nusa_bitmask_clearall(mask2);
+		nusa_bitmask_setbit(mask, i);
 		assert(find_first(mask) == i);
 		bitmap_scnprintf(buf, sizeof(buf), mask);
 		strcat(buf,"\n");
-		if (numa_parse_bitmap(buf, mask2) < 0)
+		if (nusa_parse_bitmap(buf, mask2) < 0)
 			assert(0);
-		if (memcmp(mask->maskp, mask2->maskp, numa_bitmask_nbytes(mask))) {
+		if (memcmp(mask->maskp, mask2->maskp, nusa_bitmask_nbytes(mask))) {
 			bitmap_scnprintf(buf, sizeof(buf), mask2);
 			printf("mask2 differs: %s\n", buf);
 			assert(0);

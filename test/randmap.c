@@ -1,7 +1,7 @@
 /* Randomly change policy */
 #include <stdio.h>
-#include "numa.h"
-#include "numaif.h"
+#include "nusa.h"
+#include "nusaif.h"
 #include <sys/mman.h>
 #include <sys/shm.h>
 #include <sys/ipc.h>

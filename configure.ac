@@ -1,7 +1,7 @@
 AC_PREREQ([2.64])
-AC_INIT([numactl], [2.0.12])
+AC_INIT([nusactl], [2.0.12])
 
-AC_CONFIG_SRCDIR([numactl.c])
+AC_CONFIG_SRCDIR([nusactl.c])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADERS([config.h])
@@ -14,7 +14,7 @@ LT_INIT
 
 AC_PROG_CC
 
-# Override CFLAGS so that we can specify custom CFLAGS for numademo.
+# Override CFLAGS so that we can specify custom CFLAGS for nusademo.
 AX_AM_OVERRIDE_VAR([CFLAGS])
 
 AX_TLS

@@ -1,14 +1,14 @@
 /* Copyright (C) 2003,2004 Andi Kleen, SuSE Labs.
-   Manage shared memory policy for numactl.
-   The actual policy is set in numactl itself, this just sets up and maps
+   Manage shared memory policy for nusactl.
+   The actual policy is set in nusactl itself, this just sets up and maps
    the shared memory segments and dumps them.
 
-   numactl is free software; you can redistribute it and/or
+   nusactl is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; version
    2.
 
-   numactl is distributed in the hope that it will be useful,
+   nusactl is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    General Public License for more details.
@@ -29,9 +29,9 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <unistd.h>
-#include "numa.h"
-#include "numaif.h"
-#include "numaint.h"
+#include "nusa.h"
+#include "nusaif.h"
+#include "nusaint.h"
 #include "util.h"
 #include "shm.h"
 
@@ -64,12 +64,12 @@ long huge_page_size(void)
 static void check_region(char *opt)
 {
 	if (((unsigned long)shmptr % shm_pagesize) || (shmlen % shm_pagesize)) {
-		fprintf(stderr, "numactl: policy region not page aligned\n");
+		fprintf(stderr, "nusactl: policy region not page aligned\n");
 		exit(1);
 	}
 	if (!shmlen) {
 		fprintf(stderr,
-		"numactl: policy region length not specified before %s\n",
+		"nusactl: policy region length not specified before %s\n",
 			opt);
 		exit(1);
 	}
@@ -82,7 +82,7 @@ static key_t sysvkey(char *name)
 	if (key >= 0)
 		return key;
 
-	fprintf(stderr, "numactl: Creating shm key file %s mode %04o\n",
+	fprintf(stderr, "nusactl: Creating shm key file %s mode %04o\n",
 		name, shmmode);
 	fd = creat(name, shmmode);
 	if (fd < 0)
@@ -106,7 +106,7 @@ void attach_sysvshm(char *name, char *opt)
 			complain(
                      "need a --length to create a sysv shared memory segment");
 		fprintf(stderr,
-         "numactl: Creating shared memory segment %s id %ld mode %04o length %.fMB\n",
+         "nusactl: Creating shared memory segment %s id %ld mode %04o length %.fMB\n",
 			name, shmid, shmmode, ((double)shmlen) / (1024*1024) );
 		shmfd = shmget(key, shmlen, IPC_CREAT|shmmode|shmflags);
 		if (shmfd < 0)
@@ -191,8 +191,8 @@ void dump_shm(void)
 		return;
 	}
 
-	nodes = numa_allocate_nodemask();
-	prevnodes = numa_allocate_nodemask();
+	nodes = nusa_allocate_nodemask();
+	prevnodes = nusa_allocate_nodemask();
 
 	for (c = 0; c < shmlen; c += shm_pagesize) {
 		if (get_mempolicy(&pol, nodes->maskp, nodes->size, c+shmptr,
@@ -245,7 +245,7 @@ static void vwarn(char *ptr, char *fmt, ...)
 	va_list ap;
 	unsigned long off = (unsigned long)ptr - (unsigned long)shmptr;
 	va_start(ap,fmt);
-	printf("numactl verify %lx(%lx): ",  (unsigned long)ptr, off);
+	printf("nusactl verify %lx(%lx): ",  (unsigned long)ptr, off);
 	vprintf(fmt, ap);
 	va_end(ap);
 	exitcode = 1;
@@ -253,11 +253,11 @@ static void vwarn(char *ptr, char *fmt, ...)
 
 static unsigned interleave_next(unsigned cur, struct bitmask *mask)
 {
-	int numa_num_nodes = numa_num_possible_nodes();
+	int nusa_num_nodes = nusa_num_possible_nodes();
 
 	++cur;
-	while (!numa_bitmask_isbitset(mask, cur)) {
-		cur = (cur+1) % numa_num_nodes;
+	while (!nusa_bitmask_isbitset(mask, cur)) {
+		cur = (cur+1) % nusa_num_nodes;
 	}
 	return cur;
 }
@@ -270,7 +270,7 @@ void verify_shm(int policy, struct bitmask *nodes)
 	int pol2;
 	struct bitmask *nodes2;
 
-	nodes2 = numa_allocate_nodemask();
+	nodes2 = nusa_allocate_nodemask();
 
 	if (policy == MPOL_INTERLEAVE) {
 		if (get_mempolicy(&ilnode, NULL, 0, shmptr,
@@ -288,7 +288,7 @@ void verify_shm(int policy, struct bitmask *nodes)
 			      policy_name(pol2), policy_name(policy));
 			return;
 		}
-		if (memcmp(nodes2, nodes, numa_bitmask_nbytes(nodes))) {
+		if (memcmp(nodes2, nodes, nusa_bitmask_nbytes(nodes))) {
 			vwarn(p, "mismatched node mask\n");
 			printmask("expected", nodes);
 			printmask("real", nodes2);
@@ -299,7 +299,7 @@ void verify_shm(int policy, struct bitmask *nodes)
 
 		switch (policy) {
 		case MPOL_INTERLEAVE:
-			if (node < 0 || !numa_bitmask_isbitset(nodes2, node))
+			if (node < 0 || !nusa_bitmask_isbitset(nodes2, node))
 				vwarn(p, "interleave node out of range %d\n", node);
 			if (node != ilnode) {
 				vwarn(p, "expected interleave node %d, got %d\n",
@@ -310,7 +310,7 @@ void verify_shm(int policy, struct bitmask *nodes)
 			break;
 		case MPOL_PREFERRED:
 		case MPOL_BIND:
-			if (!numa_bitmask_isbitset(nodes2, node)) {
+			if (!nusa_bitmask_isbitset(nodes2, node)) {
 				vwarn(p, "unexpected node %d\n", node);
 				printmask("expected", nodes2);
 			}

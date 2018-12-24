@@ -6,7 +6,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "numa.h"
+#include "nusa.h"
 #include <unistd.h>
 #include <asm/unistd.h>
 
@@ -28,11 +28,11 @@ int get_node_list()
         int a, got_nodes = 0, max_node, numnodes;
         long free_node_sizes;
 
-        numnodes = numa_num_configured_nodes();
+        numnodes = nusa_num_configured_nodes();
         node_to_use = (int *)malloc(numnodes * sizeof(int));
-        max_node = numa_max_node();
+        max_node = nusa_max_node();
         for (a = 0; a <= max_node; a++) {
-                if (numa_node_size(a, &free_node_sizes) > 0)
+                if (nusa_node_size(a, &free_node_sizes) > 0)
                         node_to_use[got_nodes++] = a;
         }
         if(got_nodes != numnodes)
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 	}
 
 	printf("\nMoving pages to start node ...\n");
-	rc = numa_move_pages(0, page_count, addr, NULL, status, 0);
+	rc = nusa_move_pages(0, page_count, addr, NULL, status, 0);
 	if (rc < 0)
 		perror("move_pages");
 
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 		printf("Page %d vaddr=%p node=%d\n", i, pages + i * pagesize, status[i]);
 
 	printf("\nMoving pages to target nodes ...\n");
-	rc = numa_move_pages(0, page_count, addr, nodes, status, 0);
+	rc = nusa_move_pages(0, page_count, addr, nodes, status, 0);
 
 	if (rc < 0) {
 		perror("move_pages");

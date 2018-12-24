@@ -8,58 +8,58 @@
 # application).
 # Any functions not defined in the global list (i.e. "local") will be internal
 # to the library (i.e. not exported but used within the library).
-# Thus the real function names, "numa_bind_v1" etc, are local and won't
+# Thus the real function names, "nusa_bind_v1" etc, are local and won't
 # be known to the linker.
 
 # the first 16 have v1 aliases
-# 3 of the 5 system calls that libnuma provides are common to all versions:
-libnuma_1.1 {
+# 3 of the 5 system calls that libnusa provides are common to all versions:
+libnusa_1.1 {
   global:
     set_mempolicy;
     get_mempolicy;
     mbind;
-    numa_all_nodes;
-    numa_alloc;
-    numa_alloc_interleaved;
-    numa_alloc_interleaved_subset;
-    numa_alloc_local;
-    numa_alloc_onnode;
-    numa_available;
-    numa_bind;
-    numa_distance;
-    numa_error;
-    numa_exit_on_error;
-    numa_free;
-    numa_get_interleave_mask;
-    numa_get_interleave_node;
-    numa_get_membind;
-    numa_get_run_node_mask;
-    numa_interleave_memory;
-    numa_max_node;
-    numa_migrate_pages;
-    numa_no_nodes;
-    numa_node_size64;
-    numa_node_size;
-    numa_node_to_cpus;
-    numa_pagesize;
-    numa_parse_bitmap;
-    numa_police_memory;
-    numa_preferred;
-    numa_run_on_node;
-    numa_run_on_node_mask;
-    numa_sched_getaffinity;
-    numa_sched_setaffinity;
-    numa_set_bind_policy;
-    numa_set_interleave_mask;
-    numa_set_localalloc;
-    numa_set_membind;
-    numa_set_preferred;
-    numa_set_strict;
-    numa_setlocal_memory;
-    numa_tonode_memory;
-    numa_tonodemask_memory;
-    numa_warn;
-    numa_exit_on_warn;
+    nusa_all_nodes;
+    nusa_alloc;
+    nusa_alloc_interleaved;
+    nusa_alloc_interleaved_subset;
+    nusa_alloc_local;
+    nusa_alloc_onnode;
+    nusa_available;
+    nusa_bind;
+    nusa_distance;
+    nusa_error;
+    nusa_exit_on_error;
+    nusa_free;
+    nusa_get_interleave_mask;
+    nusa_get_interleave_node;
+    nusa_get_membind;
+    nusa_get_run_node_mask;
+    nusa_interleave_memory;
+    nusa_max_node;
+    nusa_migrate_pages;
+    nusa_no_nodes;
+    nusa_node_size64;
+    nusa_node_size;
+    nusa_node_to_cpus;
+    nusa_pagesize;
+    nusa_parse_bitmap;
+    nusa_police_memory;
+    nusa_preferred;
+    nusa_run_on_node;
+    nusa_run_on_node_mask;
+    nusa_sched_getaffinity;
+    nusa_sched_setaffinity;
+    nusa_set_bind_policy;
+    nusa_set_interleave_mask;
+    nusa_set_localalloc;
+    nusa_set_membind;
+    nusa_set_preferred;
+    nusa_set_strict;
+    nusa_setlocal_memory;
+    nusa_tonode_memory;
+    nusa_tonodemask_memory;
+    nusa_warn;
+    nusa_exit_on_warn;
   local:
     *;
 };
@@ -70,78 +70,78 @@ libnuma_1.1 {
 # and the move_pages and migrate_pages system calls
 # 1.2 depends on 1.1
 
-libnuma_1.2 {
+libnusa_1.2 {
   global:
     copy_bitmask_to_nodemask;
     copy_nodemask_to_bitmask;
     copy_bitmask_to_bitmask;
     move_pages;
     migrate_pages;
-    numa_all_cpus_ptr;
-    numa_all_nodes_ptr;
-    numa_alloc_interleaved_subset;
-    numa_realloc;
-    numa_allocate_cpumask;
-    numa_allocate_nodemask;
-    numa_bind;
-    numa_bitmask_alloc;
-    numa_bitmask_clearall;
-    numa_bitmask_clearbit;
-    numa_bitmask_equal;
-    numa_bitmask_free;
-    numa_bitmask_isbitset;
-    numa_bitmask_nbytes;
-    numa_bitmask_setall;
-    numa_bitmask_setbit;
-    numa_bitmask_weight;
-    numa_get_interleave_mask;
-    numa_get_membind;
-    numa_get_mems_allowed;
-    numa_get_run_node_mask;
-    numa_interleave_memory;
-    numa_max_possible_node;
-    numa_move_pages;
-    numa_no_nodes_ptr;
-    numa_node_to_cpus;
-    numa_node_of_cpu;
-    numa_nodes_ptr;
-    numa_num_configured_cpus;
-    numa_num_configured_nodes;
-    numa_num_possible_nodes;
-    numa_num_task_cpus;
-    numa_num_task_nodes;
-    numa_num_thread_cpus;
-    numa_num_thread_nodes;
-    numa_parse_bitmap;
-    numa_parse_cpustring;
-    numa_parse_nodestring;
-    numa_run_on_node_mask;
-    numa_sched_getaffinity;
-    numa_sched_setaffinity;
-    numa_set_interleave_mask;
-    numa_set_membind;
-    numa_tonodemask_memory;
+    nusa_all_cpus_ptr;
+    nusa_all_nodes_ptr;
+    nusa_alloc_interleaved_subset;
+    nusa_realloc;
+    nusa_allocate_cpumask;
+    nusa_allocate_nodemask;
+    nusa_bind;
+    nusa_bitmask_alloc;
+    nusa_bitmask_clearall;
+    nusa_bitmask_clearbit;
+    nusa_bitmask_equal;
+    nusa_bitmask_free;
+    nusa_bitmask_isbitset;
+    nusa_bitmask_nbytes;
+    nusa_bitmask_setall;
+    nusa_bitmask_setbit;
+    nusa_bitmask_weight;
+    nusa_get_interleave_mask;
+    nusa_get_membind;
+    nusa_get_mems_allowed;
+    nusa_get_run_node_mask;
+    nusa_interleave_memory;
+    nusa_max_possible_node;
+    nusa_move_pages;
+    nusa_no_nodes_ptr;
+    nusa_node_to_cpus;
+    nusa_node_of_cpu;
+    nusa_nodes_ptr;
+    nusa_num_configured_cpus;
+    nusa_num_configured_nodes;
+    nusa_num_possible_nodes;
+    nusa_num_task_cpus;
+    nusa_num_task_nodes;
+    nusa_num_thread_cpus;
+    nusa_num_thread_nodes;
+    nusa_parse_bitmap;
+    nusa_parse_cpustring;
+    nusa_parse_nodestring;
+    nusa_run_on_node_mask;
+    nusa_sched_getaffinity;
+    nusa_sched_setaffinity;
+    nusa_set_interleave_mask;
+    nusa_set_membind;
+    nusa_tonodemask_memory;
   local:
     *;
-} libnuma_1.1;
+} libnusa_1.1;
 
-# New parsing interface for cpu/numastrings
+# New parsing interface for cpu/nusastrings
 # was added into version 1.3
 
-libnuma_1.3 {
+libnusa_1.3 {
   global:
-    numa_parse_cpustring_all;
-    numa_parse_nodestring_all;
-    numa_num_possible_cpus;
+    nusa_parse_cpustring_all;
+    nusa_parse_nodestring_all;
+    nusa_num_possible_cpus;
   local:
     *;
-} libnuma_1.2;
+} libnusa_1.2;
 
 # New interface with customizable cpuset awareness
 # was added into version 1.4
-libnuma_1.4 {
+libnusa_1.4 {
   global:
-    numa_run_on_node_mask_all;
+    nusa_run_on_node_mask_all;
   local:
     *;
-} libnuma_1.3;
+} libnusa_1.3;

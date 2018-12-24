@@ -6,8 +6,8 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <ctype.h>
-#include "numa.h"
-#include "numaint.h"
+#include "nusa.h"
+#include "nusaint.h"
 
 #define SYSFS_BLOCK 4096
 
@@ -55,9 +55,9 @@ hidden int sysfs_node_read(struct bitmask *mask, char *fmt, ...)
 			return -1;
 		if (num < 0)
 			return -2;
-		if (num >= numa_num_task_nodes())
+		if (num >= nusa_num_task_nodes())
 			return -1;
-		numa_bitmask_setbit(mask, num);
+		nusa_bitmask_setbit(mask, num);
 
 		/* Continuation not supported by kernel yet. */
 		m = end;

@@ -13,5 +13,5 @@ extern void attach_shared(char *, char *);
 extern void attach_sysvshm(char *, char *);
 extern void verify_shm(int policy, struct bitmask *);
 
-/* in numactl.c */
+/* in nusactl.c */
 extern int exitcode;
