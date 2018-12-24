@@ -15,8 +15,8 @@
 # 3 of the 5 system calls that libnusa provides are common to all versions:
 libnusa_1.1 {
   global:
-    set_mempolicy;
-    get_mempolicy;
+    set_prampolicy;
+    get_prampolicy;
     mbind;
     nusa_all_nodes;
     nusa_alloc;

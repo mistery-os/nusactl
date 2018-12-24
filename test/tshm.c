@@ -35,9 +35,9 @@ void worker(void)
 			break;
 		case TEST:
 			req.cmd = REPLY;
-			if (get_mempolicy(&req.policy, &req.nodes, NUMA_MAX_NODES+1,
+			if (get_prampolicy(&req.policy, &req.nodes, NUMA_MAX_NODES+1,
 					  map + req.offset, MPOL_F_ADDR) < 0)
-				err("get_mempolicy");
+				err("get_prampolicy");
 			write(1, &req, sizeof(struct req));
 			break;
 		case EXIT:

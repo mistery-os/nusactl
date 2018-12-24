@@ -56,9 +56,9 @@ void setpol(unsigned long offset, unsigned long length, int policy, unsigned lon
 	for (; i < end; i++) {
 		int pol2;
 		unsigned long nodes2;
-		if (get_mempolicy(&pol2, &nodes2, sizeof(long)*8, map+i*pagesize,
+		if (get_prampolicy(&pol2, &nodes2, sizeof(long)*8, map+i*pagesize,
 				  MPOL_F_ADDR) < 0)
-			err("get_mempolicy");
+			err("get_prampolicy");
 		if (pol2 != pages[i].policy) {
 			printf("%lx: got policy %d expected %d, nodes got %lx expected %lx\n",
 			       i, pol2, pages[i].policy, nodes2, pages[i].mask);

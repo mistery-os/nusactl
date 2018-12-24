@@ -23,8 +23,8 @@
 
 #define WEAK __attribute__((weak))
 
-#if !defined(__NR_mbind) || !defined(__NR_set_mempolicy) || \
-    !defined(__NR_get_mempolicy) || !defined(__NR_migrate_pages) || \
+#if !defined(__NR_mbind) || !defined(__NR_set_prampolicy) || \
+    !defined(__NR_get_prampolicy) || !defined(__NR_migrate_pages) || \
     !defined(__NR_move_pages)
 
 #if defined(__x86_64__)
@@ -35,8 +35,8 @@
 /* Official allocation */
 
 #define __NR_mbind 237
-#define __NR_set_mempolicy 238
-#define __NR_get_mempolicy 239
+#define __NR_set_prampolicy 256
+#define __NR_get_prampolicy 255
 #define __NR_migrate_pages 256
 #define __NR_move_pages 279
 
@@ -49,22 +49,22 @@
 /* Official allocation */
 
 #define __NR_mbind 1259
-#define __NR_get_mempolicy 1260
-#define __NR_set_mempolicy 1261
+#define __NR_get_prampolicy 1260
+#define __NR_set_prampolicy 1261
 
 #elif defined(__i386__)
 
 #define __NR_mbind 274
-#define __NR_get_mempolicy 275
-#define __NR_set_mempolicy 276
+#define __NR_get_prampolicy 275
+#define __NR_set_prampolicy 276
 #define __NR_migrate_pages 294
 #define __NR_move_pages 317
 
 #elif defined(__powerpc__)
 
 #define __NR_mbind 259
-#define __NR_get_mempolicy 260
-#define __NR_set_mempolicy 261
+#define __NR_get_prampolicy 260
+#define __NR_set_prampolicy 261
 #define __NR_migrate_pages 258
 /* FIXME: powerpc is missing move pages!!!
 #define __NR_move_pages xxx
@@ -78,8 +78,8 @@
  */
 #define __NR_Linux 4000
 #define __NR_mbind (__NR_Linux + 268)
-#define __NR_get_mempolicy (__NR_Linux + 269)
-#define __NR_set_mempolicy (__NR_Linux + 270)
+#define __NR_get_prampolicy (__NR_Linux + 269)
+#define __NR_set_prampolicy (__NR_Linux + 270)
 #define __NR_migrate_pages (__NR_Linux + 287)
 #endif
 
@@ -89,8 +89,8 @@
  */
 #define __NR_Linux 5000
 #define __NR_mbind (__NR_Linux + 227)
-#define __NR_get_mempolicy (__NR_Linux + 228)
-#define __NR_set_mempolicy (__NR_Linux + 229)
+#define __NR_get_prampolicy (__NR_Linux + 228)
+#define __NR_set_prampolicy (__NR_Linux + 229)
 #define __NR_migrate_pages (__NR_Linux + 246)
 #endif
 
@@ -100,8 +100,8 @@
  */
 #define __NR_Linux 6000
 #define __NR_mbind (__NR_Linux + 231)
-#define __NR_get_mempolicy (__NR_Linux + 232)
-#define __NR_set_mempolicy (__NR_Linux + 233)
+#define __NR_get_prampolicy (__NR_Linux + 232)
+#define __NR_set_prampolicy (__NR_Linux + 233)
 #define __NR_migrate_pages (__NR_Linux + 250)
 #endif
 
@@ -189,11 +189,11 @@ long syscall6(long call, long a, long b, long c, long d, long e, long f)
 #define syscall6 syscall
 #endif
 
-long WEAK get_mempolicy(int *policy, unsigned long *nmask,
+long WEAK get_prampolicy(int *policy, unsigned long *nmask,
 				unsigned long maxnode, void *addr,
 				unsigned flags)
 {
-	return syscall(__NR_get_mempolicy, policy, nmask,
+	return syscall(__NR_get_prampolicy, policy, nmask,
 					maxnode, addr, flags);
 }
 
@@ -204,11 +204,11 @@ long WEAK mbind(void *start, unsigned long len, int mode,
 				maxnode, flags);
 }
 
-long WEAK set_mempolicy(int mode, const unsigned long *nmask,
+long WEAK set_prampolicy(int mode, const unsigned long *nmask,
                                    unsigned long maxnode)
 {
 	long i;
-	i = syscall(__NR_set_mempolicy,mode,nmask,maxnode);
+	i = syscall(__NR_set_prampolicy,mode,nmask,maxnode);
 	return i;
 }
 

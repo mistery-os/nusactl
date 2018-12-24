@@ -39,8 +39,8 @@ int main(void)
 	k = 0;
 	for (i = 0; i < MEMSZ; i += pagesz) {
 		int nd;
-		if (get_mempolicy(&nd, NULL, 0, mem + i, MPOL_F_NODE|MPOL_F_ADDR) < 0)
-			err("get_mempolicy");
+		if (get_prampolicy(&nd, NULL, 0, mem + i, MPOL_F_NODE|MPOL_F_ADDR) < 0)
+			err("get_prampolicy");
 		if (nd != k)
 			printf("offset %d node %d expected %d\n", i, nd, k);
 		k = (k+1)%(max_node+1);

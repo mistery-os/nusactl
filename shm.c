@@ -195,9 +195,9 @@ void dump_shm(void)
 	prevnodes = nusa_allocate_nodemask();
 
 	for (c = 0; c < shmlen; c += shm_pagesize) {
-		if (get_mempolicy(&pol, nodes->maskp, nodes->size, c+shmptr,
+		if (get_prampolicy(&pol, nodes->maskp, nodes->size, c+shmptr,
 						MPOL_F_ADDR) < 0)
-			err("get_mempolicy on shm");
+			err("get_prampolicy on shm");
 		if (pol == prevpol)
 			continue;
 		if (prevpol != -1)
@@ -227,9 +227,9 @@ void dump_shm_nodes(void)
 	}
 
 	for (c = 0; c < shmlen; c += shm_pagesize) {
-		if (get_mempolicy(&node, NULL, 0, c+shmptr,
+		if (get_prampolicy(&node, NULL, 0, c+shmptr,
 						MPOL_F_ADDR|MPOL_F_NODE) < 0)
-			err("get_mempolicy on shm");
+			err("get_prampolicy on shm");
 		if (node == prevnode)
 			continue;
 		if (prevnode != -1)
@@ -273,16 +273,16 @@ void verify_shm(int policy, struct bitmask *nodes)
 	nodes2 = nusa_allocate_nodemask();
 
 	if (policy == MPOL_INTERLEAVE) {
-		if (get_mempolicy(&ilnode, NULL, 0, shmptr,
+		if (get_prampolicy(&ilnode, NULL, 0, shmptr,
 					MPOL_F_ADDR|MPOL_F_NODE)
 		    < 0)
-			err("get_mempolicy");
+			err("get_prampolicy");
 	}
 
 	for (p = shmptr; p - (char *)shmptr < shmlen; p += shm_pagesize) {
-		if (get_mempolicy(&pol2, nodes2->maskp, nodes2->size, p,
+		if (get_prampolicy(&pol2, nodes2->maskp, nodes2->size, p,
 							MPOL_F_ADDR) < 0)
-			err("get_mempolicy");
+			err("get_prampolicy");
 		if (pol2 != policy) {
 			vwarn(p, "wrong policy %s, expected %s\n",
 			      policy_name(pol2), policy_name(policy));
@@ -294,8 +294,8 @@ void verify_shm(int policy, struct bitmask *nodes)
 			printmask("real", nodes2);
 		}
 
-		if (get_mempolicy(&node, NULL, 0, p, MPOL_F_ADDR|MPOL_F_NODE) < 0)
-			err("get_mempolicy");
+		if (get_prampolicy(&node, NULL, 0, p, MPOL_F_ADDR|MPOL_F_NODE) < 0)
+			err("get_prampolicy");
 
 		switch (policy) {
 		case MPOL_INTERLEAVE:

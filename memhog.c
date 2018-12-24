@@ -127,8 +127,8 @@ int main(int ac, char **av)
 		madvise(map, length, MADV_NOHUGEPAGE);
 
 	gpolicy = -1;
-	if (get_mempolicy(&gpolicy, gnodes->maskp, gnodes->size, map, MPOL_F_ADDR) < 0)
-		terr("get_mempolicy");
+	if (get_prampolicy(&gpolicy, gnodes->maskp, gnodes->size, map, MPOL_F_ADDR) < 0)
+		terr("get_prampolicy");
 	if (!loose && policy != gpolicy) {
 		ret = 1;
 		printf("policy %d gpolicy %d\n", policy, gpolicy);

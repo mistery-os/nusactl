@@ -53,9 +53,9 @@ int main(int argc, char **argv)
 	unsigned long	nodemask;
 	int				mode;
 	int				nr_nodes = nusa_num_possible_nodes();
-	if (get_mempolicy(&mode, &nodemask, nr_nodes, mem,
+	if (get_prampolicy(&mode, &nodemask, nr_nodes, mem,
 					  MPOL_F_NODE | MPOL_F_ADDR) < 0) {
-		perror("get_mempolicy() failed");
+		perror("get_prampolicy() failed");
 		exit(1);
 	}
 
@@ -84,9 +84,9 @@ int main(int argc, char **argv)
 		/* Check the policy of the realloc'ed area */
 		unsigned long	realloc_nodemask;
 		int				realloc_mode;
-		if (get_mempolicy(&realloc_mode, &realloc_nodemask,
+		if (get_prampolicy(&realloc_mode, &realloc_nodemask,
 						  nr_nodes, mem, MPOL_F_NODE | MPOL_F_ADDR) < 0) {
-			perror("get_mempolicy() failed");
+			perror("get_prampolicy() failed");
 			exit(1);
 		}
 

@@ -43,16 +43,16 @@ int main(void)
 
 		++*adr;
 
-		if (get_mempolicy(&pol, mask->maskp, mask->size, adr, MPOL_F_ADDR) < 0)
-			err("get_mempolicy");
+		if (get_prampolicy(&pol, mask->maskp, mask->size, adr, MPOL_F_ADDR) < 0)
+			err("get_prampolicy");
 
 		assert(pol == MPOL_PREFERRED);
 		assert(nusa_bitmask_isbitset(mask, i));
 
 		node = 0x123;
 
-		if (get_mempolicy(&node, NULL, 0, adr, MPOL_F_ADDR|MPOL_F_NODE) < 0)
-			err("get_mempolicy2");
+		if (get_prampolicy(&node, NULL, 0, adr, MPOL_F_ADDR|MPOL_F_NODE) < 0)
+			err("get_prampolicy2");
 
 		printf("got node %d expected %d\n", node, i);
 
